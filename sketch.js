@@ -1,8 +1,11 @@
 var sketch = function (p) {
-
+	
+	var playBtn = document.getElementById("play");
 	var addBtn = document.getElementById("add");
-	var chordForm = document.getElementById("form");
+	var rootList = document.getElementById("rootList");
+	var qualList = document.getElementById("qualList");
 	var beatForm = document.getElementById("beat-form");
+	console.log(qualList);
 
 	var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
 	var sampler = new Tone.Sampler({
@@ -60,7 +63,18 @@ var sketch = function (p) {
 		"Bb4": baseUrl + "acoustic_grand_piano" + "-mp3/" + "Bb4.mp3",
 		"B4": baseUrl + "acoustic_grand_piano" + "-mp3/" + "B4.mp3"
 	})
-
+	var loopStatus = false;
+	var sched = [];
+	var beats = [];
+	var lastTime = 0;
+	var tempo = 120;
+	var beatTime = 60 / tempo;
+	var barTime = beatTime * 4;
+	var currentNote;
+	var totalNotes = 0;
+	var duration = .2;
+	var totalTime;
+	var maxMeasures = 0;
 
 	Tone.Buffer.on('load', function () {
 		console.log('...done');
@@ -71,7 +85,7 @@ var sketch = function (p) {
 	})
 
 	Tone.Buffer.on('progress', function () {
-		console.log('loading...');
+//		console.log('loading...');
 	})
 
 	Tone.Buffer.on('error', function () {
@@ -110,16 +124,22 @@ var sketch = function (p) {
 		return noteNum;
 	}
 
+	function convertBeat(beats) {
+		var m = 0;
+		var b = 0;
+		var s = 0;
+		m = Math.floor(beats / 4);
+
+		b = Math.floor(beats) - (m * 4);
+
+		s = (beats % 1) * 4;
+		return (m + ':' + b + ':' + s);
+	}
+
 	function numToNote(note) {
 
 		return notesAndNums[note];
 	}
-
-	function convertBeat(beats) {
-		return beatConvert[beats];
-
-	}
-
 
 	function findThird(root, q) {
 		//            console.log(root + "root");
@@ -152,7 +172,7 @@ var sketch = function (p) {
 		return (root + mod + 7);
 	}
 
-	function makeChord(q, r) {
+	function makeChord(r, q) {
 
 		var root = noteToNum(r);
 		var notes = [];
@@ -170,7 +190,7 @@ var sketch = function (p) {
 			sched.push(noteAndTime);
 			console.log(noteAndTime.note);
 		}
-		lastTime += parseFloat(beatBox.value);
+		lastTime += parseFloat(beatForm.value);
 		totalNotes += 3;
 
 		if (lastTime % 4 != 0) {
@@ -191,45 +211,33 @@ var sketch = function (p) {
 
 	}
 
-	function playNote() {
-		var measure;
-		var beat;
-		//            Tone.Transport.setLoopPoints(0, "2m");
+	function play() {
+		console.log("started");
+		var time;
 		Tone.Transport.loop = true;
 		Tone.Transport.start();
 
-		for (var i = 0; i < totalNotes; i++) {
+		Tone.Transport.bpm.value = tempo;
 
-			if (sched[i].beats % 4 == 0) {
-				measure = sched[i].beats / 4 + 'm';
-				sampler.triggerAttackRelease(sched[i].note, '8n', measure);
-			} else {
-				measure = Math.floor(sched[i].beats / 4);
-				beat = sched[i].beats % 4;
-				console.log('m = ' + measure);
-				console.log('n = ' + beat);
-				sampler.triggerAttackRelease(sched[i].note, '8n', Tone.TimeBase(beat, 'n') + Tone.TimeBase(measure, 'm'));
-			}
+		Tone.Transport.start();
+		if (lastTime % 4 == 0) {
+			maxMeasure = lastTime / 4;
+		} else {
+			maxMeasure = (Math.floor(lastTime / 4) + 1);
 		}
 
+		Tone.Transport.setLoopPoints(0, maxMeasure + 'm');
 
-		tempo = tempoBox.value;
-		Tone.Transport.bpm.value = tempo;
+		for (var i = 0; i < totalNotes; i++) {
+			time = convertBeat(sched[i].beats);
+			sampler.triggerAttackRelease(sched[i].note, '8n', time);
+		}
 
 		beatTime = 60 / tempo;
 		barTime = beatTime * 4;
 
 		totalTime = lastTime * beatTime;
 
-	}
-
-	function addChord() {
-		beatTime = 60 / tempo;
-		barTime = beatTime * 4;
-		quality = qualList.options[qualList.selectedIndex].value;
-		root = rootList.options[rootList.selectedIndex].value;
-		makeChord(quality, root);
-		chordList.push(root + " " + quality);
 	}
 
 	function reset() {
@@ -308,13 +316,19 @@ var sketch = function (p) {
 
 
 	addBtn.addEventListener("click", function () {
-		addBlock(chordForm.value, parseInt(beatForm.value));
-		chordForm.value = "";
-		beatForm.value = "";
-		addChord()
+		var root = rootList[rootList.selectedIndex].value;
+		var qual = qualList[qualList.selectedIndex].value;
+		makeChord(root, qual);
+		addBlock(root + qual.substring(0, 3), parseInt(beatForm.value));
 	});
+	
+	
+	playBtn.addEventListener("click", function(){
+		play();
+	});
+		
 
-
+	
 
 };
 
