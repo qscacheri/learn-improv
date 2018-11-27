@@ -1,0 +1,87 @@
+html {
+	margin: 0;
+	height: 100%
+}
+
+body {
+	height: 100%;
+	margin: 0;
+}
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+}
+
+.buttonSet {
+	border-style: solid;
+	margin-left: auto;
+	margin-right: auto;
+	align-content: center;
+	justify-content: flex-start;
+	height: 10%;
+	display: flex;
+
+}
+
+.media-button {
+	font-size: 2em;
+	height: 100%;
+	width: 20%;
+}
+
+#side-bar {
+	text-align: center;
+
+	grid-column-start: 1;
+	grid-column-end: 2;
+	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%);
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+#sketch-container {
+	/*	width: 100%;*/
+	height: 100%;
+	/*	border-style: solid;*/
+	/*	border-color: blue;*/
+	align-content: center;
+	justify-content: flex-end;
+	grid-column-start: 2;
+	grid-column-end: 9;
+	margin: none;
+	padding: none;
+}
+
+
+#main-container {
+	/*	border-color: red;*/
+	border-style: solid;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+#form {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#beat-form {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.side-text{
+	color: white;
+}
+
+
+
+#add{
+	margin-top: 10px;
+}
