@@ -1,3 +1,12 @@
+@font-face {
+	font-family: "Raleway";
+	src:
+		url("fonts/raleway_thin-webfont.eot"),
+		url("fonts/raleway_thin-webfont.svg"),
+		url("fonts/raleway_thin-webfont.ttf"),
+		url("fonts/raleway_thin-webfont.woff");
+}
+
 html {
 	margin: 0;
 	height: 100%
@@ -26,6 +35,7 @@ body {
 }
 
 .media-button {
+	font-family: "Raleway";
 	font-size: 2em;
 	height: 100%;
 	width: 20%;
@@ -71,17 +81,18 @@ body {
 }
 
 #beat-form {
-	width: 100%;
+	width: 50	%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.side-text{
+.side-text {
+	font-family: "Raleway";
 	color: white;
 }
 
 
 
-#add{
+#add {
 	margin-top: 10px;
 }
