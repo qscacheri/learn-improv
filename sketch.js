@@ -2,6 +2,7 @@ var sketch = function (p) {
 
 	var playBtn = document.getElementById("play");
 	var stopBtn = document.getElementById("stop");
+	var resetBtn = document.getElementById("reset");
 	var addBtn = document.getElementById("add");
 	var rootList = document.getElementById("rootList");
 	var qualList = document.getElementById("qualList");
@@ -204,6 +205,14 @@ var sketch = function (p) {
 	function stop() {
 		Tone.Transport.cancel();
 
+
+	}
+
+	function resetf(){
+		console.log("reset");
+		blockArray  = {};
+		console.log(blockArray.length);
+		sched = {};
 	}
 
 	function play() {
@@ -262,6 +271,7 @@ var sketch = function (p) {
 	}
 	
 	p.draw = function () {
+		p.background(0, 0, 0);
 		for (var i = 0; i < blockArray.length; i++) {
 			var currentBlock = blockArray[i];
 			drawBlock(currentBlock);
@@ -369,7 +379,12 @@ var sketch = function (p) {
 	
 	stopBtn.addEventListener("click",function(){
 		stop();
-	})
+	});
+
+	resetBtn.addEventListener("click",function(){
+		resetf();
+		console.log("reset 2");
+	});
 
 
 	function overBlock(x,y){

@@ -39,7 +39,7 @@ body {
 
 .media-button {
 	font-family: "Raleway";
-	font-size: 2em;
+	font-size: 4em;
 	height: 100%;
 	width: 20%;
 }
@@ -95,18 +95,10 @@ body {
 	margin-right: auto;
 }
 
-/*
-#play {
-	background: linear-gradient(to bottom, #4cdb4c 0%, #83c783 17%, #ffffff 93%);
-}
-
-#stop {
-	background: linear-gradient(to bottom, #ff3232 1%, #f76060 15%, #ffffff 88%);
-}
-*/
 
 
 .side-text {
+	font-size: 1.5em;
 	font-family: "Raleway";
 	color: white;
 	margin-top: 0;
