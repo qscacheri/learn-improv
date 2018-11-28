@@ -13,7 +13,8 @@ html {
 }
 
 body {
-/*	background-color: black;*/
+	/*	background-color: black;*/
+	padding-bottom: 20px;
 	height: 100%;
 	margin: 0;
 }
@@ -43,33 +44,45 @@ body {
 	width: 20%;
 }
 
-#side-bar {
+
+#top-bar {
 	text-align: center;
-	grid-column-start: 1;
-	grid-column-end: 2;
+	width: 100%;
+	margin: none;
 	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%);
 	margin: 0;
-	padding: 0;
+	padding: none;
+	height: 10%;
+}
+
+#side-bar {
+	text-align: center;
+	width: 15%;
+	margin: none;
+	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%);
+	margin: 0;
+	padding: none;
 	height: 100%;
+	float: left;
 }
 
 #sketch-container {
 	height: 100%;
-	align-content: center;
-	justify-content: flex-end;
-	grid-column-start: 2;
-	grid-column-end: 9;
 	margin: none;
 	padding: none;
+	border-style: solid;
+	background-color: red;
 }
 
 
+/*
 #main-container {
 	border-style: solid;
 	height: 100%;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
+*/
 
 #rootList {
 	margin-bottom: 10px;
@@ -98,7 +111,11 @@ body {
 }
 
 
-
 #add {
 	margin-top: 10px;
+/*	margin-bottom: 70%;*/
+}
+
+canvas {
+	width: 85% !important;
 }

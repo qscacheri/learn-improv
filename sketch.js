@@ -1,11 +1,11 @@
 var sketch = function (p) {
-	
+
 	var playBtn = document.getElementById("play");
+	var stopBtn = document.getElementById("stop");
 	var addBtn = document.getElementById("add");
 	var rootList = document.getElementById("rootList");
 	var qualList = document.getElementById("qualList");
 	var beatForm = document.getElementById("beat-form");
-	console.log(qualList);
 
 	var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
 	var sampler = new Tone.Sampler({
@@ -83,9 +83,9 @@ var sketch = function (p) {
 
 
 	})
-
+	
 	Tone.Buffer.on('progress', function () {
-//		console.log('loading...');
+		//		console.log('loading...');
 	})
 
 	Tone.Buffer.on('error', function () {
@@ -206,8 +206,8 @@ var sketch = function (p) {
 		console.log(sampler.loaded);
 	}
 
-	function pause() {
-		Tone.Transport.stop();
+	function stop() {
+		Tone.Transport.cancel();
 
 	}
 
@@ -230,7 +230,7 @@ var sketch = function (p) {
 
 		for (var i = 0; i < totalNotes; i++) {
 			time = convertBeat(sched[i].beats);
-			sampler.triggerAttackRelease(sched[i].note, '8n', time);
+			sampler.triggerAttackRelease(sched[i].note, '2n', time);
 		}
 
 		beatTime = 60 / tempo;
@@ -249,7 +249,7 @@ var sketch = function (p) {
 
 	var width = window.innerWidth;
 	var height = window.innerWidth;
-	var blockWidth = window.innerWidth / 12;
+	var blockWidth = window.innerWidth / 16 - 1;
 	var blockHeight = 50;
 	var blockArray = [];
 	var blockEnd = {
@@ -259,12 +259,13 @@ var sketch = function (p) {
 
 
 	p.setup = function () {
-		p.createCanvas((window.innerWidth) - width / 8 - 15, (window.innerHeight / 8) * 8);
+		p.createCanvas((window.innerWidth), (window.innerHeight));
 		p.background(100);
 		p.colorMode(p.HSL, 360, 100, 100);
 		p.background(0);
 		p.textAlign(p.CENTER, p.CENTER);
 	}
+	
 	p.draw = function () {
 		for (var i = 0; i < blockArray.length; i++) {
 			//			console.log(i);
@@ -314,21 +315,24 @@ var sketch = function (p) {
 		p.text(block.text + " x " + block.duration + " beats", block.x + (block.width / 2), block.y + (block.height / 2));
 	}
 
-
 	addBtn.addEventListener("click", function () {
 		var root = rootList[rootList.selectedIndex].value;
 		var qual = qualList[qualList.selectedIndex].value;
 		makeChord(root, qual);
 		addBlock(root + qual.substring(0, 3), parseInt(beatForm.value));
 	});
-	
-	
-	playBtn.addEventListener("click", function(){
+
+
+	playBtn.addEventListener("click", function () {
 		play();
 	});
-		
-
 	
+	stopBtn.addEventListener("click",function(){
+		stop();
+	})
+
+
+
 
 };
 
