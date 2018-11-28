@@ -9,8 +9,6 @@ var sketch = function (p) {
 
 	var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
 	var sampler = new Tone.Sampler({
-
-
 		"C1": baseUrl + "acoustic_grand_piano" + "-mp3/" + "C1.mp3",
 		"Db1": baseUrl + "acoustic_grand_piano" + "-mp3/" + "Db1.mp3",
 		"D1": baseUrl + "acoustic_grand_piano" + "-mp3/" + "D1.mp3",
@@ -75,17 +73,14 @@ var sketch = function (p) {
 	var duration = .2;
 	var totalTime;
 	var maxMeasures = 0;
-
+	var selectedBlock;
 	Tone.Buffer.on('load', function () {
 		console.log('...done');
 		sampler.sync();
 		sampler.toMaster();
-
-
 	})
 	
 	Tone.Buffer.on('progress', function () {
-		//		console.log('loading...');
 	})
 
 	Tone.Buffer.on('error', function () {
@@ -188,7 +183,7 @@ var sketch = function (p) {
 			};
 
 			sched.push(noteAndTime);
-			console.log(noteAndTime.note);
+			// console.log(noteAndTime.note);
 		}
 		lastTime += parseFloat(beatForm.value);
 		totalNotes += 3;
@@ -196,14 +191,14 @@ var sketch = function (p) {
 		if (lastTime % 4 != 0) {
 			maxMeasures = Math.floor(lastTime / 4) + 1;
 		} else(maxMeasures = lastTime / 4);
-		console.log(maxMeasures + '= max measures');
+		// console.log(maxMeasures + '= max measures');
 
 		Tone.Transport.setLoopPoints(0, maxMeasures + 'm');
 	};
 
 	function loopSwitch() {
 		loopStatus = !loopStatus;
-		console.log(sampler.loaded);
+		// console.log(sampler.loaded);
 	}
 
 	function stop() {
@@ -268,16 +263,45 @@ var sketch = function (p) {
 	
 	p.draw = function () {
 		for (var i = 0; i < blockArray.length; i++) {
-			//			console.log(i);
 			var currentBlock = blockArray[i];
 			drawBlock(currentBlock);
+		}
+	}
+
+	p.mousePressed = function(){
+		
+		if (overBlock(p.mouseX,p.mouseY)!=-1){
+			console.log("clicked block");
+			// selectedBlock = overBlock(p.mouseX,p.mouseY);
+			// blockArray[selectedBlock].selected = true;
+		
+
+			 if (overBlock(p.mouseX,p.mouseY)==selectedBlock){
+				console.log("clicked already selected");
+				blockArray[selectedBlock].selected = false;
+
+
+			}
+
+			else if (overBlock(p.mouseX,p.mouseY)!=selectedBlock){
+				console.log("clicked new block")
+				if (selectedBlock!=null)
+				blockArray[selectedBlock].selected = false;
+				selectedBlock = overBlock(p.mouseX,p.mouseY);
+				blockArray[selectedBlock].selected = true;
+			}
+		}
+		else {
+			console.log("did not click block");
+			if (selectedBlock!=null)
+			blockArray[selectedBlock].selected = false;
+		selectedBlock=null;
 		}
 	}
 
 	function addBlock(chord, length) {
 		var randColor = p.random(50) + 40;
 		var newBlock;
-		console.log(blockEnd.x);
 		if (blockEnd.x + (length * blockWidth) < window.innerWidth) {
 			newBlock = {
 				text: chord,
@@ -286,7 +310,8 @@ var sketch = function (p) {
 				height: blockHeight,
 				x: blockEnd.x,
 				y: blockEnd.y,
-				color: randColor
+				color: randColor,
+				selected: false
 
 			};
 			blockEnd.x += blockWidth * length;
@@ -300,7 +325,8 @@ var sketch = function (p) {
 				height: blockHeight,
 				x: blockEnd.x,
 				y: blockEnd.y,
-				color: randColor
+				color: randColor,
+				selected: false
 
 			};
 			blockEnd.x += blockWidth * length;
@@ -309,8 +335,22 @@ var sketch = function (p) {
 	}
 
 	function drawBlock(block) {
-		p.fill(216, 100, block.color);
-		p.rect(block.x, block.y, block.width, block.height);
+				p.noStroke();
+
+		
+		if (block.selected==true){
+			// p.noFill()
+			p.fill(0, 100, 100);
+			p.rect(block.x, block.y, block.width, block.height);
+			p.fill(216, 100, block.color);
+			p.rect(block.x+4, block.y+4, block.width-8, block.height-8	);
+		}
+
+		else{
+			p.fill(216, 100, block.color);
+			p.rect(block.x, block.y, block.width, block.height);
+		}
+		
 		p.fill(0, 0, 100);
 		p.text(block.text + " x " + block.duration + " beats", block.x + (block.width / 2), block.y + (block.height / 2));
 	}
@@ -330,6 +370,20 @@ var sketch = function (p) {
 	stopBtn.addEventListener("click",function(){
 		stop();
 	})
+
+
+	function overBlock(x,y){
+		var currentBlock;
+		for (var i = 0; i<blockArray.length; i++){
+			currentBlock = blockArray[i];
+			if (x>currentBlock.x&&x<currentBlock.x+currentBlock.width){
+				if (y>currentBlock.y&&y<currentBlock.y+currentBlock.height) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
 
 
 

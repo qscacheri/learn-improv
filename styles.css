@@ -46,10 +46,11 @@ body {
 
 
 #top-bar {
+	padding-top: 10px;
 	text-align: center;
 	width: 100%;
 	margin: none;
-	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%);
+	background: linear-gradient(to top, #1e5799 0%, #2989d8 10%);
 	margin: 0;
 	padding: none;
 	height: 10%;
@@ -59,10 +60,10 @@ body {
 	text-align: center;
 	width: 15%;
 	margin: none;
-	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 50%);
+	background: linear-gradient(to bottom, #1e5799 0%, #2989d8 5%);
 	margin: 0;
 	padding: none;
-	height: 100%;
+	height: 90%;
 	float: left;
 }
 
@@ -108,14 +109,17 @@ body {
 .side-text {
 	font-family: "Raleway";
 	color: white;
+	margin-top: 0;
+	padding: 0;
 }
 
 
 #add {
-	margin-top: 10px;
+/*	margin-top: 10px;*/
 /*	margin-bottom: 70%;*/
 }
 
 canvas {
 	width: 85% !important;
+	height: 90% !important;
 }

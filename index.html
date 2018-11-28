@@ -13,19 +13,16 @@
 <body>
 
 
-	<div class=buttonSet>
-		<button class='media-button' id="play">Play</button>
-
-		<button class='media-button' onclick="pause()">Pause</button>
-		<button class='media-button' id="stop">Stop</button>
-
-		<button class='media-button' onclick="reset()">Reset</button>
-
-	</div>
-
 
 	<div id="top-bar">
+		
 		<p class="side-text">Enter chord here :</p>
+		<button id="play">Play</button>
+
+		<button onclick="pause()">Pause</button>
+		<button id="stop">Stop</button>
+
+		<button onclick="reset()">Reset</button>
 		<select id="rootList">
 			<option value="C">C</option>
 			<option value="C#/Db">C#/Db</option>
@@ -47,21 +44,27 @@
 			<option value="augmented">augmented</option>
 			<option value="diminished">diminished</option>
 		</select>
-		<select id="qualList">
-			<option value="major">7</option>
-			<option value="minor">9</option>
-			<option value="augmented">11</option>
-			<option value="diminished">13</option>
+
+		<select id="accList">
+			<option value="-">—</option>
+			<option value="flat">♭</option>
+			<option value="sharp">♯</option>
+		</select>
+
+		<select id="susList">
+			<option value="-">—</option>
+			<option value="7">7</option>
+			<option value="7">9</option>
+			<option value="7">11</option>
+			<option value="7">13</option>
 		</select>
 
 
 		<input id="beat-form" type="text" value="4">
 		<button id="add" type="button">Add</button>
 
-		<p class="side-text">Chord Info</p>
-
 	</div>
-	
+
 	<div id="side-bar"></div>
 
 
