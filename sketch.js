@@ -7,7 +7,13 @@ var sketch = function (p) {
 	var rootList = document.getElementById("rootList");
 	var qualList = document.getElementById("qualList");
 	var beatForm = document.getElementById("beat-form");
+	var clickPos = {
+	 				set: false,
+	 				x:p.mouseX,
+	 				y:p.mouseY
+	 			};
 	// var hue = 216;
+	var dragging = false;
 	var hue = 0;
 	var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
 	var sampler = new Tone.Sampler({
@@ -76,6 +82,7 @@ var sketch = function (p) {
 	var totalTime;
 	var maxMeasures = 0;
 	var selectedBlock;
+	var movingBlock;
 	Tone.Buffer.on('load', function () {
 		console.log('...done');
 		sampler.sync();
@@ -269,23 +276,62 @@ var sketch = function (p) {
 
 	p.setup = function () {
 		p.createCanvas((window.innerWidth), (window.innerHeight));
-		p.background(100);
+		p.background(0);
 		p.colorMode(p.HSL, 360, 100, 100);
 		p.background(0);
 		p.textAlign(p.CENTER, p.CENTER);
 	}
 	
 	p.draw = function () {
-		p.background(0, 0, 0);
+		p.background(0, 100, 100);
 		for (var i = 0; i < blockArray.length; i++) {
 			var currentBlock = blockArray[i];
 			drawBlock(currentBlock);
 		}
+
+		if (dragging){
+			drawMovingBlock();
+		}
 	}
+
+	 p.mouseDragged = function(){
+	 	var over = overBlock(p.mouseX,p.mouseY);
+	 		if (over!=-1){
+	 			if (clickPos.set == false)
+	 			clickPos = {
+	 				set: true,
+	 				x:p.mouseX,
+	 				y:p.mouseY
+	 			};
+
+	 			movingBlock = over;
+	 			dragging = true;
+	 		}
+	 		
+
+	}
+	p.mouseReleased = function() {
+		// console.
+			dragging = false;
+			clickPos.set = false;
+	}
+
+	function drawMovingBlock(){
+
+		var block = blockArray[movingBlock];
+		var difX = clickPos.x -  block.x;
+		var difY = clickPos.y - block.y;
+			p.fill(hue, 100, block.color);
+			p.rect(p.mouseX-difX, p.mouseY-difY, block.width, block.height,20);
+			p.fill(0, 0, 100);
+			p.text(block.text + " x " + block.duration + " beats", (p.mouseX - difX) + (block.width / 2), (p.mouseY - difY) + (block.height / 2));
+	}
+
 
 	p.mousePressed = function(){
 		
 		if (overBlock(p.mouseX,p.mouseY)!=-1){
+			
 			console.log("clicked block");
 			// selectedBlock = overBlock(p.mouseX,p.mouseY);
 			// blockArray[selectedBlock].selected = true;
@@ -294,6 +340,7 @@ var sketch = function (p) {
 			 if (overBlock(p.mouseX,p.mouseY)==selectedBlock){
 				console.log("clicked already selected");
 				blockArray[selectedBlock].selected = false;
+				selectedBlock = null;
 
 
 			}
@@ -354,15 +401,15 @@ var sketch = function (p) {
 		
 		if (block.selected==true){
 			// p.noFill()
-			p.fill(0, 100, 100);
-			p.rect(block.x, block.y, block.width, block.height);
+			p.fill(0, 0, 0);
+			p.rect(block.x, block.y, block.width, block.height,20);
 			p.fill(hue, 100, block.color);
-			p.rect(block.x+4, block.y+4, block.width-8, block.height-8	);
+			p.rect(block.x+4, block.y+4, block.width-8, block.height-8,20);
 		}
 
 		else{
 			p.fill(hue, 100, block.color);
-			p.rect(block.x, block.y, block.width, block.height);
+			p.rect(block.x, block.y, block.width, block.height,20);
 		}
 		
 		p.fill(0, 0, 100);
@@ -403,10 +450,6 @@ var sketch = function (p) {
 		}
 		return -1;
 	}
-
-
-
-
 };
 
 new p5(sketch, 'sketch-container');

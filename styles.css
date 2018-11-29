@@ -13,10 +13,10 @@ html {
 }
 
 body {
-	/*	background-color: black;*/
+	padding-bottom: 20px;
 	height: 100%;
 	margin: 0;
-	 overflow:hidden;
+	overflow: hidden;
 }
 
 html,
@@ -42,12 +42,11 @@ body {
 	font-size: 4em;
 	height: 100%;
 	width: 20%;
-	padding: 0;
 }
 
 
 #top-bar {
-	/*padding-top: 10px;*/
+	padding-top: 10px;
 	text-align: center;
 	width: 100%;
 	margin: none;
@@ -75,8 +74,6 @@ body {
 	border-style: solid;
 	background-color: red;
 }
-
-
 
 #rootList {
 	margin-bottom: 10px;
