@@ -7,7 +7,8 @@ var sketch = function (p) {
 	var rootList = document.getElementById("rootList");
 	var qualList = document.getElementById("qualList");
 	var beatForm = document.getElementById("beat-form");
-
+	// var hue = 216;
+	var hue = 0;
 	var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
 	var sampler = new Tone.Sampler({
 		"C1": baseUrl + "acoustic_grand_piano" + "-mp3/" + "C1.mp3",
@@ -210,9 +211,13 @@ var sketch = function (p) {
 
 	function resetf(){
 		console.log("reset");
-		blockArray  = {};
+		blockArray  = [];
 		console.log(blockArray.length);
-		sched = {};
+		sched = [];
+		blockEnd = {
+			x: 10,
+			y: 10
+		};
 	}
 
 	function play() {
@@ -337,7 +342,6 @@ var sketch = function (p) {
 				y: blockEnd.y,
 				color: randColor,
 				selected: false
-
 			};
 			blockEnd.x += blockWidth * length;
 		}
@@ -352,12 +356,12 @@ var sketch = function (p) {
 			// p.noFill()
 			p.fill(0, 100, 100);
 			p.rect(block.x, block.y, block.width, block.height);
-			p.fill(216, 100, block.color);
+			p.fill(hue, 100, block.color);
 			p.rect(block.x+4, block.y+4, block.width-8, block.height-8	);
 		}
 
 		else{
-			p.fill(216, 100, block.color);
+			p.fill(hue, 100, block.color);
 			p.rect(block.x, block.y, block.width, block.height);
 		}
 		
