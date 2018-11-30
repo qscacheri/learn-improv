@@ -105,3 +105,21 @@ canvas {
 	width: 85% !important;
 	height: 90% !important;
 }
+
+#side-bar-header{
+	font-family: "Raleway";
+	color: white;
+}
+
+.side-bar-item{
+
+	position: relative;
+	left: 5%;
+	margin-bottom: 10%;
+	display: block;
+}
+
+h2{
+	font-family: "Raleway";
+	color: white;
+}

@@ -7,6 +7,16 @@ var sketch = function(p) {
   var rootList = document.getElementById("rootList");
   var qualList = document.getElementById("qualList");
   var beatForm = document.getElementById("beat-form");
+
+  var sideRoot = document.getElementById("side-root");
+  var sideQual = document.getElementById("side-qual");
+	var noteList = document.getElementById("note-list");
+
+  sideQual.selectedIndex = 2;
+  console.log(sideQual);
+  var sideBeats;
+
+  var totalChords = 0;
   var clickPos = {
     set: false,
     x: p.mouseX,
@@ -15,6 +25,7 @@ var sketch = function(p) {
   // var hue = 216;
   var dragging = false;
   var hue = 0;
+  var octave = 5;
   var baseUrl = "https://qscacheri.github.io/Sound-Samples/MusyngKite/";
   var sampler = new Tone.Sampler({
     "C1": baseUrl + "acoustic_grand_piano" + "-mp3/" + "C1.mp3",
@@ -146,60 +157,59 @@ var sketch = function(p) {
 
   function findThird(root, q) {
     var mod;
-    if (q == ("major")) {
+    if (q == (0)) {
       mod = 0;
-    } else if (q == ("minor")) {
+    } else if (q == (1)) {
       mod = -1;
-    } else if (q == ("diminished")) {
+    } else if (q == (2)) {
       mod = -1;
-    } else if (q == ("augmented")) {
+    } else if (q == (3)) {
       mod = 0;
     }
-
     return (root + 4 + mod);
   }
 
   function findFifth(root, q) {
+    console.log("root = " + root);
     var mod;
-    if (q == ("major")) {
+    if (q == (0)) {
       mod = 0;
-    } else if (q == ("minor")) {
+    } else if (q == (1)) {
       mod = 0;
-    } else if (q == ("diminished")) {
+    } else if (q == (2)) {
       mod = -1;
-    } else if (q == ("augmented")) {
+    } else if (q == (3)) {
       mod = 1;
     }
-
     return (root + mod + 7);
   }
 
   function makeChord(r, q) {
 
-    var root = noteToNum(r);
-    var notes = [];
-    notes[0] = root + (12 * 5);
-    notes[1] = findThird(root, q) + (12 * 5);
-    notes[2] = findFifth(root, q) + (12 * 5);
+    var rootNum = parseInt(r);
+    var noteArray = [];
+    noteArray[0] = rootNum;
+    noteArray[1] = findThird(rootNum, q);
+    noteArray[2] = findFifth(rootNum, q);
     var noteAndTime;
 
-    for (var i = 0; i < 3; i++) {
-      noteAndTime = {
-        note: Tone.Frequency(notes[i], "midi").toNote(),
-        beats: lastTime
-      };
+    var chordInfo = {
+      root: rootNum,
+      quality: parseInt(q),
+      notes: noteArray,
+      time: lastTime
+    };
 
-      sched.push(noteAndTime);
-      // console.log(noteAndTime.note);
-    }
     lastTime += parseFloat(beatForm.value);
     totalNotes += 3;
-
+    totalChords++;
     if (lastTime % 4 != 0) {
       maxMeasures = Math.floor(lastTime / 4) + 1;
     } else(maxMeasures = lastTime / 4);
 
     Tone.Transport.setLoopPoints(0, maxMeasures + 'm');
+
+    return chordInfo;
   };
 
   function loopSwitch() {
@@ -215,7 +225,7 @@ var sketch = function(p) {
   function resetf() {
     console.log("reset");
     blockArray = [];
-    console.log(blockArray.length);
+    // console.log(blockArray.length);
     sched = [];
     blockEnd = {
       x: 10,
@@ -226,8 +236,8 @@ var sketch = function(p) {
   lastTime = 0;
 
   function play() {
-    console.log("started");
     var time;
+    var block;
     Tone.Transport.loop = true;
     Tone.Transport.start();
 
@@ -239,12 +249,17 @@ var sketch = function(p) {
     } else {
       maxMeasure = (Math.floor(lastTime / 4) + 1);
     }
-
     Tone.Transport.setLoopPoints(0, maxMeasure + 'm');
 
-    for (var i = 0; i < totalNotes; i++) {
-      time = convertBeat(sched[i].beats);
-      sampler.triggerAttackRelease(sched[i].note, '2n', time);
+    for (var i = 0; i < totalChords; i++) {
+      console.log(blockArray[i].notes[1]);
+      block = blockArray[i];
+      for (var j = 0; j < block.notes.length; j++) {
+        console.log(block.notes[j] + "\n");
+        var note = Tone.Frequency(block.notes[j] + (octave * 12), "midi").toNote();
+        time = convertBeat(block.time);
+        sampler.triggerAttackRelease(note, '2n', time);
+      }
     }
 
     beatTime = 60 / tempo;
@@ -289,6 +304,15 @@ var sketch = function(p) {
     if (dragging) {
       drawMovingBlock();
     }
+
+		if (selectedBlock!=null){
+			var notesText = "";
+			sideQual.selectedIndex = blockArray[selectedBlock].quality;
+			sideRoot.selectedIndex = blockArray[selectedBlock].root;
+			for (var i = 0; i< blockArray[selectedBlock].notes.length; i++){
+				notesText+=Tone.Frequency(blockArray[selectedBlock].notes[i], "midi").toNote()+"\n";
+			}
+		}
   }
 
   p.mouseDragged = function() {
@@ -355,7 +379,7 @@ var sketch = function(p) {
     }
   }
 
-  function addBlock(chord, length) {
+  function addBlock(chord, length, chordInfo, ) {
     var randColor = p.random(50) + 40;
     var newBlock;
     if (blockEnd.x + (length * blockWidth) < window.innerWidth) {
@@ -367,7 +391,11 @@ var sketch = function(p) {
         x: blockEnd.x,
         y: blockEnd.y,
         color: randColor,
-        selected: false
+        selected: false,
+        root: chordInfo.root,
+        quality: chordInfo.quality,
+        notes: chordInfo.notes,
+        time: chordInfo.time
 
       };
       blockEnd.x += blockWidth * length;
@@ -382,7 +410,11 @@ var sketch = function(p) {
         x: blockEnd.x,
         y: blockEnd.y,
         color: randColor,
-        selected: false
+        selected: false,
+        root: chordInfo.root,
+        quality: chordInfo.quality,
+        notes: chordInfo.notes,
+        time: chordInfo.time
       };
       blockEnd.x += blockWidth * length;
     }
@@ -410,9 +442,11 @@ var sketch = function(p) {
 
   addBtn.addEventListener("click", function() {
     var root = rootList[rootList.selectedIndex].value;
+    var rootText = rootList[rootList.selectedIndex].text;
     var qual = qualList[qualList.selectedIndex].value;
-    makeChord(root, qual);
-    addBlock(root + qual.substring(0, 3), parseInt(beatForm.value));
+    var qualText = qualList[qualList.selectedIndex].text;
+    var chordInfo = makeChord(root, qual);
+    addBlock(rootText + qualText.substring(0, 3), parseInt(beatForm.value), chordInfo);
   });
 
 
@@ -425,6 +459,7 @@ var sketch = function(p) {
   });
 
   resetBtn.addEventListener("click", function() {
+    setSideText();
     resetf();
   });
 
@@ -441,7 +476,10 @@ var sketch = function(p) {
     }
     return -1;
   }
-
 };
+
+function setSideText() {
+  // sideQual.text =
+}
 
 new p5(sketch, 'sketch-container');
