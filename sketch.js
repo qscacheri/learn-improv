@@ -435,7 +435,6 @@ var sketch = function (p) {
 
 	resetBtn.addEventListener("click",function(){
 		resetf();
-		console.log("reset 2");
 	});
 
 
