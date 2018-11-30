@@ -228,6 +228,8 @@ var sketch = function (p) {
 		};
 	}
 
+	lastTime = 0;
+
 	function play() {
 		console.log("started");
 		var time;
