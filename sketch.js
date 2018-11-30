@@ -88,7 +88,7 @@ var sketch = function (p) {
 		sampler.sync();
 		sampler.toMaster();
 	})
-	
+
 	Tone.Buffer.on('progress', function () {
 	})
 
@@ -281,7 +281,7 @@ var sketch = function (p) {
 		p.background(0);
 		p.textAlign(p.CENTER, p.CENTER);
 	}
-	
+
 	p.draw = function () {
 		p.background(0, 100, 100);
 		for (var i = 0; i < blockArray.length; i++) {
@@ -307,7 +307,7 @@ var sketch = function (p) {
 	 			movingBlock = over;
 	 			dragging = true;
 	 		}
-	 		
+
 
 	}
 	p.mouseReleased = function() {
@@ -329,13 +329,13 @@ var sketch = function (p) {
 
 
 	p.mousePressed = function(){
-		
+
 		if (overBlock(p.mouseX,p.mouseY)!=-1){
-			
+
 			console.log("clicked block");
 			// selectedBlock = overBlock(p.mouseX,p.mouseY);
 			// blockArray[selectedBlock].selected = true;
-		
+
 
 			 if (overBlock(p.mouseX,p.mouseY)==selectedBlock){
 				console.log("clicked already selected");
@@ -398,10 +398,11 @@ var sketch = function (p) {
 	function drawBlock(block) {
 				p.noStroke();
 
-		
-		if (block.selected==true){
+
+		if (block.selected==false){
 			// p.noFill()
-			p.fill(0, 0, 0);
+			p.fill(0, 100, 100
+				);
 			p.rect(block.x, block.y, block.width, block.height,20);
 			p.fill(hue, 100, block.color);
 			p.rect(block.x+4, block.y+4, block.width-8, block.height-8,20);
@@ -411,7 +412,7 @@ var sketch = function (p) {
 			p.fill(hue, 100, block.color);
 			p.rect(block.x, block.y, block.width, block.height,20);
 		}
-		
+
 		p.fill(0, 0, 100);
 		p.text(block.text + " x " + block.duration + " beats", block.x + (block.width / 2), block.y + (block.height / 2));
 	}
@@ -427,7 +428,7 @@ var sketch = function (p) {
 	playBtn.addEventListener("click", function () {
 		play();
 	});
-	
+
 	stopBtn.addEventListener("click",function(){
 		stop();
 	});
