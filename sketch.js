@@ -310,7 +310,7 @@ var sketch = function(p) {
 			sideQual.selectedIndex = blockArray[selectedBlock].quality;
 			sideRoot.selectedIndex = blockArray[selectedBlock].root;
 			for (var i = 0; i< blockArray[selectedBlock].notes.length; i++){
-				notesText+=Tone.Frequency(blockArray[selectedBlock].notes[i], "midi").toNote()+"\n";
+				// notesText+=Tone.Frequency(blockArray[selectedBlock].notes[i], "midi").toNote()+"\n";
 			}
 		}
   }
@@ -419,6 +419,7 @@ var sketch = function(p) {
       blockEnd.x += blockWidth * length;
     }
     blockArray.push(newBlock);
+    console.log(newBlock);
   }
 
   function drawBlock(block) {
@@ -446,7 +447,7 @@ var sketch = function(p) {
     var qual = qualList[qualList.selectedIndex].value;
     var qualText = qualList[qualList.selectedIndex].text;
     var chordInfo = makeChord(root, qual);
-    addBlock(rootText + qualText.substring(0, 3), parseInt(beatForm.value), chordInfo);
+    addBlock(rootText + qualText.substring(0, 3), parseFloat(beatForm.value), chordInfo);
   });
 
 
