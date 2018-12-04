@@ -10,7 +10,9 @@ var sketch = function(p) {
 
   var sideRoot = document.getElementById("side-root");
   var sideQual = document.getElementById("side-qual");
-	var noteList = document.getElementById("note-list");
+  var noteList = document.getElementById("note-list");
+
+  var chordCounter = 0;
 
   sideQual.selectedIndex = 2;
   console.log(sideQual);
@@ -225,7 +227,6 @@ var sketch = function(p) {
   function resetf() {
     console.log("reset");
     blockArray = [];
-    // console.log(blockArray.length);
     sched = [];
     blockEnd = {
       x: 10,
@@ -236,7 +237,7 @@ var sketch = function(p) {
   lastTime = 0;
 
   function play() {
-    var time;
+    var playTime;
     var block;
     Tone.Transport.loop = true;
     Tone.Transport.start();
@@ -254,11 +255,28 @@ var sketch = function(p) {
     for (var i = 0; i < totalChords; i++) {
       console.log(blockArray[i].notes[1]);
       block = blockArray[i];
+      playTime = convertBeat(block.time);
+      console.log(playTime);
+      Tone.Transport.schedule(function(time) {
+
+        if (chordCounter != 0) blockArray[chordCounter - 1].selected = false;
+        else {
+            blockArray[totalChords-1].selected = false;
+        }
+        blockArray[chordCounter].selected = true;
+        chordCounter++;
+        console.log("fuck this");
+        if (chordCounter + 1 > totalChords) {
+          chordCounter = 0;
+          console.log("last chord");
+        }
+
+      }, playTime);
       for (var j = 0; j < block.notes.length; j++) {
         console.log(block.notes[j] + "\n");
         var note = Tone.Frequency(block.notes[j] + (octave * 12), "midi").toNote();
-        time = convertBeat(block.time);
-        sampler.triggerAttackRelease(note, '2n', time);
+
+        sampler.triggerAttackRelease(note, '2n', playTime);
       }
     }
 
@@ -305,14 +323,14 @@ var sketch = function(p) {
       drawMovingBlock();
     }
 
-		if (selectedBlock!=null){
-			var notesText = "";
-			sideQual.selectedIndex = blockArray[selectedBlock].quality;
-			sideRoot.selectedIndex = blockArray[selectedBlock].root;
-			for (var i = 0; i< blockArray[selectedBlock].notes.length; i++){
-				// notesText+=Tone.Frequency(blockArray[selectedBlock].notes[i], "midi").toNote()+"\n";
-			}
-		}
+    if (selectedBlock != null) {
+      var notesText = "";
+      sideQual.selectedIndex = blockArray[selectedBlock].quality;
+      sideRoot.selectedIndex = blockArray[selectedBlock].root;
+      for (var i = 0; i < blockArray[selectedBlock].notes.length; i++) {
+        // notesText+=Tone.Frequency(blockArray[selectedBlock].notes[i], "midi").toNote()+"\n";
+      }
+    }
   }
 
   p.mouseDragged = function() {
@@ -469,6 +487,7 @@ var sketch = function(p) {
     var currentBlock;
     for (var i = 0; i < blockArray.length; i++) {
       currentBlock = blockArray[i];
+
       if (x > currentBlock.x && x < currentBlock.x + currentBlock.width) {
         if (y > currentBlock.y && y < currentBlock.y + currentBlock.height) {
           return i;
