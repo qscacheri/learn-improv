@@ -14,7 +14,7 @@ var sketch = function(p) {
 
   var chordCounter = 0;
 
-  sideQual.selectedIndex = 2;
+
   console.log(sideQual);
   var sideBeats;
 

@@ -13,57 +13,78 @@
 <body>
 
 	<div id="top-bar">
+		<div id="top-bar-content">
+			<p class="side-text">Enter chord here :</p>
+			<button id="play">Play</button>
 
-		<p class="side-text">Enter chord here :</p>
-		<button id="play">Play</button>
+			<button onclick="pause()">Pause</button>
+			<button id="stop">Stop</button>
 
-		<button onclick="pause()">Pause</button>
-		<button id="stop">Stop</button>
+			<button id="reset">Reset</button>
 
-		<button id="reset">Reset</button>
+			<select id="rootList">
+				<option value=0>C</option>
+				<option value=1>C#/Db</option>
+				<option value=2>D</option>
+				<option value=3>D#/Eb</option>
+				<option value=4>E</option>
+				<option value=5>F</option>
+				<option value=6>F#/Gb</option>
+				<option value=7>G</option>
+				<option value=8>G#/Ab</option>
+				<option value=9>A</option>
+				<option value=10>A#/Bb</option>
+				<option value=11>B</option>
+			</select>
 
-		<select id="rootList">
-			<option value=0>C</option>
-			<option value=1>C#/Db</option>
-			<option value=2>D</option>
-			<option value=3>D#/Eb</option>
-			<option value=4>E</option>
-			<option value=5>F</option>
-			<option value=6>F#/Gb</option>
-			<option value=7>G</option>
-			<option value=8>G#/Ab</option>
-			<option value=9>A</option>
-			<option value=10>A#/Bb</option>
-			<option value=11>B</option>
-		</select>
+			<select id="qualList">
+				<option value="0">major</option>
+				<option value="1">minor</option>
+				<option value="2">augmented</option>
+				<option value="3">diminished</option>
+			</select>
 
-		<select id="qualList">
-			<option value="0">major</option>
-			<option value="1">minor</option>
-			<option value="2">augmented</option>
-			<option value="3">diminished</option>
-		</select>
+			<div class="top-bar-item">
+				<select>
+					<option value="♮">♮ </option>
+					<option value="flat">♭</option>
+					<option value="flat">♭♭</option>
+				</select>
 
-		<select id="accList">
-			<option value="-">—</option>
-			<option value="flat">♭</option>
-			<option value="sharp">♯</option>
-		</select>
+				<input type="checkbox" name="7" value="7">7
+			</div>
 
-		<select id="susList">
-			<option value="-">—</option>
-			<option value="7">7</option>
-			<option value="7">9</option>
-			<option value="7">11</option>
-			<option value="7">13</option>
-		</select>
+			<div class="top-bar-item">
+				<select>
+					<option value="♮">♮</option>
+					<option value="flat">♭</option>
+					<option value="sharp">♯</option>
+				</select>
 
+				<input type="checkbox" name=9 value=9>9
+			</div>
 
-		<input id="beat-form" type="text" value="4">
-		<button id="add" type="button">Add</button>
+			<div class="top-bar-item">
+				<select>
+					<option value="♮">♮</option>
+					<option value="sharp">♯</option>
+				</select>
+				<input type="checkbox" name=11 value=11>11
+			</div>
 
+			<div class="top-bar-item">
+				<select>
+					<option value="-">♮</option>
+					<option value="flat">♭</option>
+					<option value="sharp">♯</option>
+				</select>
+				<input type="checkbox" name=13 value=13>13
+			</div>
+
+			<input id="beat-form" type="text" value="4">
+			<button id="add" type="button">Add</button>
+		</div>
 	</div>
-
 	<div id="side-bar">
 		<h1 class="side-bar-text" id="side-bar-header">Chord Info</h1>
 		<select class="side-bar-item" id="side-root">
@@ -93,6 +114,8 @@
 			<option value="flat">♭</option>
 			<option value="sharp">♯</option>
 		</select>
+
+
 
 		<select class="side-bar-item">
 			<option value="-">—</option>
